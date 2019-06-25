@@ -1,5 +1,5 @@
 ---
-title: 从COPY的并行化到gpcopy工具的诞生（未完）
+title: 从COPY的并行化到gpcopy工具的诞生
 subtitle: 记录对gpcopy工具重要的人和事
 summary:  记录对gpcopy工具重要的人和事
 authors:
@@ -59,7 +59,7 @@ projects: []
 
 随着第一个版本的发布，用户的反馈非常好，很快用户就提出需求，希望全面替换gptransfer的功能。我们开始想办法支持不同segment数量的两个gpdb cluster之间的数据传输。期间很多好的想法被提出来，不断得尝试实现，特别是我们组的[Bob](https://github.com/baotingfang)通过很简单的方案就窍门地解决了从segment数量少的gpdb cluster导到segment数量多的gpdb cluster。还有针对小表直接走master节点，不通过segment去启动多个并行任务，来减少启动的时间。
 
-针对从segment数量少的gpdb cluster导到segment数量多的gpdb cluster的情况，我们是在是没有办法，最后又回到了利用External Table来实现的老路上来。
+针对从segment数量少的gpdb cluster导到segment数量多的gpdb cluster的情况，我们实在是没有办法，最后又回到了利用External Table来实现的老路上来。
 
 这里有篇文章介绍了这个时候的gpcopy：[Greenplum数据迁移工具gpcopy升级到 1.1.0](https://cloud.tencent.com/developer/news/355959)
 
@@ -82,7 +82,7 @@ projects: []
 
 同时在他的帮助下，我们组的[林文](https://github.com/linwen)和他一起努力将这个令人兴奋的特性backport到老版本gpdb5上。到这里，我们gpcopy就可以很容易支持针对特定表的特定查询（比如可以只查询某个特定时间段）进行并行导出了。有了这个功能，客户就可以用gpcopy来给数据做增量的数据迁移了。这个新功能一下子将gpcopy的从偶尔使用的工具变成了日常使用的工具，也是它从数据迁移的特性使用场景中拓展出其他的使用方法。
 
-为了配合这个特性，我们组新来了[杨峻峰](https://github.com/JunfengYang)很快实现了针对追加方式的验证，只要验证目标表中新插入的数据，而不是全部数据。另外我们还实现了重命名目标表：利用正则表达式的组概念进行对目标表的改名。另外我们组又来了Chen Mulong，也开始加入对gpcopy进行精雕细琢。
+为了配合这个特性，我们组新来了[杨峻峰](https://github.com/JunfengYang)很快实现了针对追加方式的验证，只要验证目标表中新插入的数据，而不是全部数据。另外我们还实现了重命名目标表：利用正则表达式的组概念进行对目标表的改名。另外我们组又来了[Chen Mulong](https://github.com/beeender)，也开始加入对gpcopy进行精雕细琢。
 
 通过这次新的版本发布，希望gpcopy能够迎来更广的使用场景，拥有有更好的未来！
 
